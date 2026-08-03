@@ -332,3 +332,246 @@ export default function App() {
               </div>
             </>
           )}
+                        </div>
+
+              <div className="space-y-5">
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.amountLabel[language]}
+                  </span>
+                  <input
+                    type="number"
+                    value={inputAmount}
+                    onChange={(e) => setInputAmount(e.target.value)}
+                    placeholder="₹0"
+                    required
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-[#0f8181]"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.categoryLabel[language]}
+                  </span>
+                  <select
+                    value={inputCategoryIndex}
+                    onChange={(e) =>
+                      setInputCategoryIndex(Number(e.target.value))
+                    }
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+                  >
+                    {categoriesRegistry.map((cat, index) => (
+                      <option key={cat.en} value={index}>
+                        {language === "EN" ? cat.en : cat.hi}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.monthLabel[language]}
+                  </span>
+                  <select
+                    value={inputMonthEN}
+                    onChange={(e) => setInputMonthEN(e.target.value)}
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+                  >
+                    {calendarMonthsEN.map((month) => (
+                      <option key={month} value={month}>
+                        {language === "EN"
+                          ? month
+                          : calendarMonthsHI[
+                              calendarMonthsEN.indexOf(month)
+                            ]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.noteLabel[language]}
+                  </span>
+                  <input
+                    type="text"
+                    value={inputNote}
+                    onChange={(e) => setInputNote(e.target.value)}
+                    placeholder={
+                      language === "EN"
+                        ? "Optional note"
+                        : "विवरण (वैकल्पिक)"
+                    }
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+                  />
+                </label>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="submit"
+                    className="flex-1 rounded-xl bg-[#0f8181] py-3 font-bold text-white"
+                  >
+                    {editingExpenseId
+                      ? text.updateExpenseBtn[language]
+                      : text.addExpenseBtn[language]}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsFormOpen(false);
+                      setEditingExpenseId(null);
+                      setInputAmount("");
+                      setInputNote("");
+                      setInputCategoryIndex(0);
+                      setInputMonthEN(currentMonthEN);
+                    }}
+                    className="flex-1 rounded-xl border border-slate-300 py-3 font-bold"
+                  >
+                    {text.cancel[language]}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Bottom Navigation */}
+        <nav className="fixed bottom-0 left-1/2 z-40 flex w-full max-w-md -translate-x-1/2 justify-around border-t bg-white py-3 shadow-lg">
+          <button
+            onClick={() => setActiveTab("home")}
+            className={`flex flex-col items-center ${
+              activeTab === "home"
+                ? "text-[#0f8181]"
+                 />
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.categoryLabel[language]}
+                  </span>
+                  <select
+                    value={inputCategoryIndex}
+                    onChange={(e) =>
+                      setInputCategoryIndex(Number(e.target.value))
+                    }
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+                  >
+                    {categoriesRegistry.map((cat, index) => (
+                      <option key={cat.en} value={index}>
+                        {language === "EN" ? cat.en : cat.hi}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.monthLabel[language]}
+                  </span>
+                  <select
+                    value={inputMonthEN}
+                    onChange={(e) => setInputMonthEN(e.target.value)}
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+                  >
+                    {calendarMonthsEN.map((month) => (
+                      <option key={month} value={month}>
+                        {language === "EN"
+                          ? month
+                          : calendarMonthsHI[
+                              calendarMonthsEN.indexOf(month)
+                            ]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-semibold">
+                    {text.noteLabel[language]}
+                  </span>
+                  <input
+                    type="text"
+                    value={inputNote}
+                    onChange={(e) => setInputNote(e.target.value)}
+                    placeholder={
+                      language === "EN"
+                        ? "Optional note"
+                        : "विवरण (वैकल्पिक)"
+                    }
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
+                  />
+                </label>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="submit"
+                    className="flex-1 rounded-xl bg-[#0f8181] py-3 font-bold text-white"
+                  >
+                    {editingExpenseId
+                      ? text.updateExpenseBtn[language]
+                      : text.addExpenseBtn[language]}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsFormOpen(false);
+                      setEditingExpenseId(null);
+                      setInputAmount("");
+                      setInputNote("");
+                      setInputCategoryIndex(0);
+                      setInputMonthEN(currentMonthEN);
+                    }}
+                    className="flex-1 rounded-xl border border-slate-300 py-3 font-bold"
+                  >
+                    {text.cancel[language]}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Bottom Navigation */}
+        <nav className="fixed bottom-0 left-1/2 z-40 flex w-full max-w-md -translate-x-1/2 justify-around border-t bg-white py-3 shadow-lg">
+          <button
+            onClick={() => setActiveTab("home")}
+            className={`flex flex-col items-center ${
+              activeTab === "home"
+                ? "text-[#0f8181] font-bold"
+                : "text-slate-500"
+            }`}
+          >
+            <span>🏠</span>
+            <span className="text-xs">{text.home[language]}</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("track")}
+            className={`flex flex-col items-center ${
+              activeTab === "track"
+                ? "text-[#0f8181] font-bold"
+                : "text-slate-500"
+            }`}
+          >
+            <span>📊</span>
+            <span className="text-xs">{text.track[language]}</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("account")}
+            className={`flex flex-col items-center ${
+              activeTab === "account"
+                ? "text-[#0f8181] font-bold"
+                : "text-slate-500"
+            }`}
+          >
+            <span>👤</span>
+            <span className="text-xs">{text.account[language]}</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  );
+}
