@@ -49,8 +49,7 @@ export default function App() {
     month: "short",
   });
 
-  const [inputMonthEN, setInputMonthEN] =
-    useState(currentMonthEN);
+  const [inputMonthEN, setInputMonthEN] = useState(currentMonthEN);
 
   const categoriesRegistry = [
     { en: "🛒 Groceries (Ration)", hi: "🛒 राशन (किराना)" },
@@ -111,6 +110,12 @@ export default function App() {
     cancel: { EN: "Cancel", HI: "रद्द करें" },
     graph: { EN: "12 Month Graph", HI: "12 महीने का ग्राफ" },
     premium: { EN: "Premium", HI: "प्रीमियम" },
+    amountLabel: { EN: "Amount", HI: "राशि" },
+    categoryLabel: { EN: "Category", HI: "श्रेणी" },
+    monthLabel: { EN: "Month", HI: "महीना" },
+    noteLabel: { EN: "Note", HI: "विवरण" },
+    addExpenseBtn: { EN: "Add Expense", HI: "खर्च जोड़ें" },
+    updateExpenseBtn: { EN: "Update Expense", HI: "खर्च अपडेट करें" },
   };
 
   const currentMonthExpenses = expenses.filter(
@@ -148,20 +153,17 @@ export default function App() {
       calendarMonthsEN.indexOf(inputMonthEN);
 
     const newExpense: Expense = {
-      id:
-        editingExpenseId ??
-        crypto.randomUUID(),
+      id: editingExpenseId ?? crypto.randomUUID(),
       amount: Number(inputAmount),
-      categoryEN:
-        categoriesRegistry[inputCategoryIndex].en,
-      categoryHI:
-        categoriesRegistry[inputCategoryIndex].hi,
+      categoryEN: categoriesRegistry[inputCategoryIndex].en,
+      categoryHI: categoriesRegistry[inputCategoryIndex].hi,
       note: inputNote,
       date: new Date().toISOString(),
       monthEN: inputMonthEN,
       monthHI: calendarMonthsHI[monthIndex],
     };
-        if (editingExpenseId) {
+
+    if (editingExpenseId) {
       setExpenses((prev) =>
         prev.map((item) =>
           item.id === editingExpenseId ? newExpense : item
@@ -201,8 +203,7 @@ export default function App() {
     );
   };
 
-  return (
-    <div className="min-h-screen bg-[#f7f8fc] text-slate-800 flex justify-center">
+  return (    <div className="min-h-screen bg-[#f7f8fc] text-slate-800 flex justify-center">
       <div className="w-full max-w-md min-h-screen bg-white shadow-xl relative pb-24">
 
         {/* HEADER */}
@@ -226,7 +227,6 @@ export default function App() {
           {activeTab === "home" && (
             <>
               <div className="rounded-3xl bg-gradient-to-r from-teal-700 to-indigo-700 text-white p-6">
-
                 <p className="text-sm opacity-80">
                   {text.balance[language]}
                 </p>
@@ -236,7 +236,6 @@ export default function App() {
                 </h2>
 
                 <div className="grid grid-cols-2 gap-4 mt-6">
-
                   <div>
                     <p className="text-xs opacity-80">
                       {text.budget[language]}
@@ -256,14 +255,16 @@ export default function App() {
                       ₹{totalSpent.toLocaleString("en-IN")}
                     </h3>
                   </div>
-
                 </div>
-
               </div>
 
               <button
                 onClick={() => {
                   setEditingExpenseId(null);
+                  setInputAmount("");
+                  setInputNote("");
+                  setInputCategoryIndex(0);
+                  setInputMonthEN(currentMonthEN);
                   setIsFormOpen(true);
                 }}
                 className="w-full rounded-xl bg-indigo-700 text-white py-4 font-bold"
@@ -272,7 +273,6 @@ export default function App() {
               </button>
 
               <div className="space-y-3">
-
                 {currentMonthExpenses.length === 0 ? (
                   <div className="text-center py-10 text-slate-400">
                     No Expenses Yet
@@ -281,7 +281,7 @@ export default function App() {
                   currentMonthExpenses.map((expense) => (
                     <div
                       key={expense.id}
-                      className="border rounded-2xl p-4 flex justify-between"
+                      className="border rounded-2xl p-4 flex justify-between items-start"
                     >
                       <div>
                         <h3 className="font-bold">
@@ -290,9 +290,11 @@ export default function App() {
                             : expense.categoryHI}
                         </h3>
 
-                        <p className="text-sm text-slate-500">
-                          {expense.note}
-                        </p>
+                        {expense.note && (
+                          <p className="text-sm text-slate-500">
+                            {expense.note}
+                          </p>
+                        )}
 
                         <p className="text-xs text-slate-400">
                           {expense.monthEN}
@@ -300,52 +302,254 @@ export default function App() {
                       </div>
 
                       <div className="text-right">
-
                         <h3 className="font-black">
-                          ₹{expense.amount}
+                          ₹{expense.amount.toLocaleString("en-IN")}
                         </h3>
 
-                        <button
-                          onClick={() =>
-                            triggerEditFlow(expense)
-                          }
-                          className="text-blue-600 text-sm mr-2"
-                        >
-                          Edit
-                        </button>
+                        <div className="mt-2 flex gap-2 justify-end">
+                          <button
+                            onClick={() => triggerEditFlow(expense)}
+                            className="text-blue-600 text-sm font-medium"
+                          >
+                            Edit
+                          </button>
 
-                        <button
-                          onClick={() =>
-                            triggerDeleteFlow(expense.id)
-                          }
-                          className="text-red-600 text-sm"
-                        >
-                          Delete
-                        </button>
-
+                          <button
+                            onClick={() =>
+                              triggerDeleteFlow(expense.id)
+                            }
+                            className="text-red-600 text-sm font-medium"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
-
                     </div>
                   ))
                 )}
+              </div>
+            </>
+          )}          {activeTab === "track" && (
+            <>
+              <div className="rounded-3xl bg-white border p-5">
+                <h2 className="text-xl font-black mb-5">
+                  {text.graph[language]}
+                </h2>
 
+                <div className="mb-5">
+                  <select
+                    value={selectedCategory ?? ""}
+                    onChange={(e) =>
+                      setSelectedCategory(
+                        e.target.value === "" ? null : e.target.value
+                      )
+                    }
+                    className="w-full rounded-xl border border-slate-300 p-3"
+                  >
+                    <option value="">
+                      {language === "EN"
+                        ? "All Categories"
+                        : "सभी श्रेणियाँ"}
+                    </option>
+
+                    {categoriesRegistry.map((cat) => (
+                      <option key={cat.en} value={cat.en}>
+                        {language === "EN" ? cat.en : cat.hi}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-end justify-between gap-2 h-64 border-b border-l px-2 pb-2">
+                  {graphData.map((value, index) => (
+                    <div
+                      key={calendarMonthsEN[index]}
+                      className="flex flex-col items-center flex-1"
+                    >
+                      <div
+                        className="w-full rounded-t-lg bg-teal-600 transition-all"
+                        style={{
+                          height: `${
+                            (value / highestValue) * 180
+                          }px`,
+                          minHeight: value > 0 ? "6px" : "0px",
+                        }}
+                      />
+
+                      <span className="mt-2 text-[10px] font-semibold">
+                        {language === "EN"
+                          ? calendarMonthsEN[index]
+                          : calendarMonthsHI[index]}
+                      </span>
+
+                      <span className="text-[10px] text-slate-500">
+                        ₹{value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}          {activeTab === "track" && (
+            <>
+              <div className="rounded-3xl bg-white border p-5">
+                <h2 className="text-xl font-black mb-5">
+                  {text.graph[language]}
+                </h2>
+
+                <div className="mb-5">
+                  <select
+                    value={selectedCategory ?? ""}
+                    onChange={(e) =>
+                      setSelectedCategory(
+                        e.target.value === "" ? null : e.target.value
+                      )
+                    }
+                    className="w-full rounded-xl border border-slate-300 p-3"
+                  >
+                    <option value="">
+                      {language === "EN"
+                        ? "All Categories"
+                        : "सभी श्रेणियाँ"}
+                    </option>
+
+                    {categoriesRegistry.map((cat) => (
+                      <option key={cat.en} value={cat.en}>
+                        {language === "EN" ? cat.en : cat.hi}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-end justify-between gap-2 h-64 border-b border-l px-2 pb-2">
+                  {graphData.map((value, index) => (
+                    <div
+                      key={calendarMonthsEN[index]}
+                      className="flex flex-col items-center flex-1"
+                    >
+                      <div
+                        className="w-full rounded-t-lg bg-teal-600 transition-all"
+                        style={{
+                          height: `${
+                            (value / highestValue) * 180
+                          }px`,
+                          minHeight: value > 0 ? "6px" : "0px",
+                        }}
+                      />
+
+                      <span className="mt-2 text-[10px] font-semibold">
+                        {language === "EN"
+                          ? calendarMonthsEN[index]
+                          : calendarMonthsHI[index]}
+                      </span>
+
+                      <span className="text-[10px] text-slate-500">
+                        ₹{value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </>
           )}
-                        </div>
+
+          {activeTab === "account" && (
+            <>
+              <div className="rounded-3xl border bg-white p-5 space-y-5">
+
+                <div>
+                  <h2 className="text-xl font-black">
+                    {text.budget[language]}
+                  </h2>
+
+                  {isEditingBudget ? (
+                    <div className="mt-3 flex gap-2">
+                      <input
+                        type="number"
+                        value={budgetInput}
+                        onChange={(e) =>
+                          setBudgetInput(e.target.value)
+                        }
+                        className="flex-1 rounded-xl border border-slate-300 p-3"
+                      />
+
+                      <button
+                        onClick={() => {
+                          const value = Number(budgetInput);
+                          if (!isNaN(value) && value > 0) {
+                            setMonthlyBudget(value);
+                          }
+                          setIsEditingBudget(false);
+                        }}
+                        className="rounded-xl bg-teal-700 px-4 text-white font-bold"
+                      >
+                        {text.save[language]}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-3 flex items-center justify-between">
+                      <h3 className="text-2xl font-black">
+                        ₹{monthlyBudget.toLocaleString("en-IN")}
+                      </h3>
+
+                      <button
+                        onClick={() => {
+                          setBudgetInput(
+                            monthlyBudget.toString()
+                          );
+                          setIsEditingBudget(true);
+                        }}
+                        className="rounded-lg border px-4 py-2"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="border-t pt-5">
+                  <h3 className="font-bold mb-3">
+                    UPI QR
+                  </h3>
+
+                  <div className="flex justify-center">
+                    <QRCodeSVG
+                      value="upi://pay?pa=demo@upi&pn=HisaabKitaab&cu=INR"
+                      size={180}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}        </main>
+
+        {isFormOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+            <form
+              onSubmit={handleSaveExpense}
+              className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl"
+            >
+              <h2 className="mb-6 text-2xl font-black">
+                {editingExpenseId
+                  ? text.edit[language]
+                  : text.add[language]}
+              </h2>
 
               <div className="space-y-5">
                 <label className="block">
                   <span className="text-sm font-semibold">
                     {text.amountLabel[language]}
                   </span>
+
                   <input
                     type="number"
                     value={inputAmount}
-                    onChange={(e) => setInputAmount(e.target.value)}
+                    onChange={(e) =>
+                      setInputAmount(e.target.value)
+                    }
                     placeholder="₹0"
                     required
-                    className="mt-2 w-full rounded-xl border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-[#0f8181]"
+                    className="mt-2 w-full rounded-xl border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-teal-600"
                   />
                 </label>
 
@@ -353,16 +557,21 @@ export default function App() {
                   <span className="text-sm font-semibold">
                     {text.categoryLabel[language]}
                   </span>
+
                   <select
                     value={inputCategoryIndex}
                     onChange={(e) =>
-                      setInputCategoryIndex(Number(e.target.value))
+                      setInputCategoryIndex(
+                        Number(e.target.value)
+                      )
                     }
                     className="mt-2 w-full rounded-xl border border-slate-300 p-3"
                   >
                     {categoriesRegistry.map((cat, index) => (
                       <option key={cat.en} value={index}>
-                        {language === "EN" ? cat.en : cat.hi}
+                        {language === "EN"
+                          ? cat.en
+                          : cat.hi}
                       </option>
                     ))}
                   </select>
@@ -372,18 +581,19 @@ export default function App() {
                   <span className="text-sm font-semibold">
                     {text.monthLabel[language]}
                   </span>
+
                   <select
                     value={inputMonthEN}
-                    onChange={(e) => setInputMonthEN(e.target.value)}
+                    onChange={(e) =>
+                      setInputMonthEN(e.target.value)
+                    }
                     className="mt-2 w-full rounded-xl border border-slate-300 p-3"
                   >
-                    {calendarMonthsEN.map((month) => (
+                    {calendarMonthsEN.map((month, index) => (
                       <option key={month} value={month}>
                         {language === "EN"
                           ? month
-                          : calendarMonthsHI[
-                              calendarMonthsEN.indexOf(month)
-                            ]}
+                          : calendarMonthsHI[index]}
                       </option>
                     ))}
                   </select>
@@ -393,10 +603,13 @@ export default function App() {
                   <span className="text-sm font-semibold">
                     {text.noteLabel[language]}
                   </span>
+
                   <input
                     type="text"
                     value={inputNote}
-                    onChange={(e) => setInputNote(e.target.value)}
+                    onChange={(e) =>
+                      setInputNote(e.target.value)
+                    }
                     placeholder={
                       language === "EN"
                         ? "Optional note"
@@ -409,7 +622,7 @@ export default function App() {
                 <div className="flex gap-3 pt-2">
                   <button
                     type="submit"
-                    className="flex-1 rounded-xl bg-[#0f8181] py-3 font-bold text-white"
+                    className="flex-1 rounded-xl bg-teal-700 py-3 font-bold text-white"
                   >
                     {editingExpenseId
                       ? text.updateExpenseBtn[language]
@@ -434,144 +647,52 @@ export default function App() {
               </div>
             </form>
           </div>
-        )}
-
-        {/* Bottom Navigation */}
-        <nav className="fixed bottom-0 left-1/2 z-40 flex w-full max-w-md -translate-x-1/2 justify-around border-t bg-white py-3 shadow-lg">
+        )}        <nav className="fixed bottom-0 left-1/2 z-40 flex w-full max-w-md -translate-x-1/2 justify-around border-t bg-white py-3 shadow-lg">
           <button
             onClick={() => setActiveTab("home")}
             className={`flex flex-col items-center ${
               activeTab === "home"
-                ? "text-[#0f8181]"
-                 />
-                </label>
-
-                <label className="block">
-                  <span className="text-sm font-semibold">
-                    {text.categoryLabel[language]}
-                  </span>
-                  <select
-                    value={inputCategoryIndex}
-                    onChange={(e) =>
-                      setInputCategoryIndex(Number(e.target.value))
-                    }
-                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
-                  >
-                    {categoriesRegistry.map((cat, index) => (
-                      <option key={cat.en} value={index}>
-                        {language === "EN" ? cat.en : cat.hi}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="text-sm font-semibold">
-                    {text.monthLabel[language]}
-                  </span>
-                  <select
-                    value={inputMonthEN}
-                    onChange={(e) => setInputMonthEN(e.target.value)}
-                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
-                  >
-                    {calendarMonthsEN.map((month) => (
-                      <option key={month} value={month}>
-                        {language === "EN"
-                          ? month
-                          : calendarMonthsHI[
-                              calendarMonthsEN.indexOf(month)
-                            ]}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="text-sm font-semibold">
-                    {text.noteLabel[language]}
-                  </span>
-                  <input
-                    type="text"
-                    value={inputNote}
-                    onChange={(e) => setInputNote(e.target.value)}
-                    placeholder={
-                      language === "EN"
-                        ? "Optional note"
-                        : "विवरण (वैकल्पिक)"
-                    }
-                    className="mt-2 w-full rounded-xl border border-slate-300 p-3"
-                  />
-                </label>
-
-                <div className="flex gap-3 pt-2">
-                  <button
-                    type="submit"
-                    className="flex-1 rounded-xl bg-[#0f8181] py-3 font-bold text-white"
-                  >
-                    {editingExpenseId
-                      ? text.updateExpenseBtn[language]
-                      : text.addExpenseBtn[language]}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsFormOpen(false);
-                      setEditingExpenseId(null);
-                      setInputAmount("");
-                      setInputNote("");
-                      setInputCategoryIndex(0);
-                      setInputMonthEN(currentMonthEN);
-                    }}
-                    className="flex-1 rounded-xl border border-slate-300 py-3 font-bold"
-                  >
-                    {text.cancel[language]}
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* Bottom Navigation */}
-        <nav className="fixed bottom-0 left-1/2 z-40 flex w-full max-w-md -translate-x-1/2 justify-around border-t bg-white py-3 shadow-lg">
-          <button
-            onClick={() => setActiveTab("home")}
-            className={`flex flex-col items-center ${
-              activeTab === "home"
-                ? "text-[#0f8181] font-bold"
+                ? "text-teal-700 font-bold"
                 : "text-slate-500"
             }`}
           >
-            <span>🏠</span>
-            <span className="text-xs">{text.home[language]}</span>
+            <span className="text-xl">🏠</span>
+            <span className="text-xs">
+              {text.home[language]}
+            </span>
           </button>
 
           <button
             onClick={() => setActiveTab("track")}
             className={`flex flex-col items-center ${
               activeTab === "track"
-                ? "text-[#0f8181] font-bold"
+                ? "text-teal-700 font-bold"
                 : "text-slate-500"
             }`}
           >
-            <span>📊</span>
-            <span className="text-xs">{text.track[language]}</span>
+            <span className="text-xl">📊</span>
+            <span className="text-xs">
+              {text.track[language]}
+            </span>
           </button>
 
           <button
             onClick={() => setActiveTab("account")}
             className={`flex flex-col items-center ${
               activeTab === "account"
-                ? "text-[#0f8181] font-bold"
+                ? "text-teal-700 font-bold"
                 : "text-slate-500"
             }`}
           >
-            <span>👤</span>
-            <span className="text-xs">{text.account[language]}</span>
+            <span className="text-xl">👤</span>
+            <span className="text-xs">
+              {text.account[language]}
+            </span>
           </button>
         </nav>
       </div>
     </div>
   );
 }
+
+          
